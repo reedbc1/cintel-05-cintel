@@ -15,6 +15,7 @@ import pandas as pd
 import plotly.express as px
 from shinywidgets import render_plotly
 from scipy import stats
+import statistics
 
 # --------------------------------------------
 # Import icons as you like
@@ -204,3 +205,14 @@ with ui.card():
             fig.update_layout(xaxis_title="Time",yaxis_title="Temperature (°C)")
 
             return fig
+
+with ui.card():
+    ui.card_header("Descriptive Statistics")
+    @render.text
+    def desc_stats():
+        deque_snapshot, df, latest_dictionary_entry = reactive_calc_combined()
+        temp_list = [item['temp'] for item in deque_snapshot]
+        return f"Mean: {statistics.mean(temp_list)} \
+        \nMedian: {statistics.median(temp_list)} \
+        \nMode: {statistics.mode(temp_list)}"
+    
